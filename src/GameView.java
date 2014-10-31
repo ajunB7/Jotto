@@ -41,10 +41,12 @@ class GameView extends JPanel implements IView {
         guessArea.add(giveUpButton);
 
 
-
-
-
-
+        guessButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                model.setGuessString(guessInput.getText());
+            }
+        });
 
         this.add(guessArea);
 
