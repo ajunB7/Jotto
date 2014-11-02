@@ -42,12 +42,18 @@ class TableView extends JPanel implements IView {
     }
 
     public void updateTable(){
-        dtm.addRow(new Object[] {model.getGuessString(), model.getExactMatches(), model.getPartialMatches()});
+        if (model.getNewGame()){
+            for (int i = (dtm.getRowCount() - 1); i > -1; i--) {
+                dtm.removeRow(i);
+            }
+        }
+        else if (model.getValidation()) {
+            dtm.addRow(new Object[]{model.getGuessString(), model.getExactMatches(), model.getPartialMatches()});
+        }
     }
 
     // IView interface
     public void updateView() {
-        System.out.println("TableView: updateView");
         updateTable();
 
     }

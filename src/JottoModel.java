@@ -15,31 +15,37 @@ public class JottoModel
     private Word guessWord;
     private String guessString;
     private String answerString;
-    private String[] guessedSoFar;
     private int[] exactMatchedCount;
     private int[] partialMatchedCount;
     private int guessCount;
     private boolean[] partialMatches;
     private boolean[] exactMatches;
+    private boolean gameOver;
+    private boolean validation;
+    private boolean won;
+    private boolean newGame;
 
     public void init(){
         allWords = new WordList("words.txt");
         guessWord = allWords.randomWord();
         answerString = guessWord.getWord();
         System.out.println("Guess: " + answerString);
-        guessedSoFar = new String[10];
         exactMatchedCount = new int[10];
         partialMatchedCount = new int[10];
         partialMatches = new boolean[5];
         exactMatches = new boolean[5];
         guessCount = -1;
+        gameOver = false;
+        validation = true;
+        won = false;
+        newGame = true;
+        notifyObservers();
     }
 
     public void setGuessString(String input){
+        newGame = false;
         guessString = input;
         guessString = guessString.trim().toUpperCase();
-        System.out.println("Entered Word: " + guessString);
-        guessCount++;
         validateGuess();
     }
 
@@ -54,6 +60,7 @@ public class JottoModel
 
     private void validateGuess(){
         if (validation()){
+            guessCount++;
             resetMatches();
 
             char[] cloneAnswerString = answerString.toCharArray();
@@ -65,7 +72,7 @@ public class JottoModel
                      exactMatchedCount[guessCount]++;
                      cloneAnswerString[i] = '*';
                      guessStringClone[i] = '^';
-                    System.out.println("Matched: " + guessString.charAt(i));
+//                    System.out.println("Matched: " + guessString.charAt(i));
                 }
             }
 
@@ -73,24 +80,36 @@ public class JottoModel
                for (int j = 0; j < 5; j++) {
                    if(guessStringClone[i] == cloneAnswerString[j] ){
                        partialMatches[i] = true;
-                       partialMatchedCount[i]++;
+                       partialMatchedCount[guessCount]++;
                        cloneAnswerString[j] = '*';
-                       System.out.println("Partial Matched: " + guessString.charAt(i));
+//                       System.out.println("Partial Matched: " + guessString.charAt(i));
                        break;
                    }
                }
             }
 
+            if(guessCount == 9 || exactMatchedCount[guessCount] == 5){
+                gameOver();
+            }
 
 
         }
         notifyObservers();
     }
 
+    private void gameOver(){
+        gameOver = true;
+        if (exactMatchedCount[guessCount] == 5){
+            won = true;
+        }
+    }
+
     private boolean validation(){
         if (guessString.length() != 5){
+            validation = false;
             return false;
         }else {
+            validation = true;
             return true;
         }
     }
@@ -103,6 +122,24 @@ public class JottoModel
     }
     public String getGuessString(){
         return guessString;
+    }
+    public int getGuessCountLeft(){
+        return (10 - guessCount - 1);
+    }
+    public boolean getGameOver(){
+        return gameOver;
+    }
+    public String getAnswer(){
+        return answerString;
+    }
+    public boolean getValidation(){
+        return validation;
+    }
+    public boolean getWon(){
+        return won;
+    }
+    public boolean getNewGame(){
+        return newGame;
     }
 
 
@@ -117,7 +154,6 @@ public class JottoModel
     // notify the IView observer
     private void notifyObservers() {
         for (IView view : this.views) {
-            System.out.println("Model: notify View");
             view.updateView();
         }
     }
