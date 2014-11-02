@@ -24,10 +24,20 @@ public class JottoModel
     private boolean validation;
     private boolean won;
     private boolean newGame;
+    private int difficulty;
+
+    public JottoModel(){
+        difficulty = 0;
+    }
+
 
     public void init(){
         allWords = new WordList("words.txt");
-        guessWord = allWords.randomWord();
+        if (difficulty != 3) {
+            guessWord = allWords.randomWord(difficulty);
+        }else {
+            guessWord = allWords.randomWord();
+        }
         answerString = guessWord.getWord();
         System.out.println("Guess: " + answerString);
         exactMatchedCount = new int[10];
@@ -49,8 +59,13 @@ public class JottoModel
         validateGuess();
     }
 
+    public void setDifficulty(int diff){
+        difficulty = diff;
+        init();
+    }
+
     private void resetMatches(){
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < NUM_LETTERS; i++) {
             partialMatches[i] = false;
             exactMatches[i] = false;
         }
@@ -66,7 +81,7 @@ public class JottoModel
             char[] cloneAnswerString = answerString.toCharArray();
             char[] guessStringClone = guessString.toCharArray();
 
-            for (int i = 0; i < 5; i++) {
+            for (int i = 0; i < NUM_LETTERS; i++) {
                 if(cloneAnswerString[i] == guessStringClone[i] ){
                      exactMatches[i] = true;
                      exactMatchedCount[guessCount]++;
@@ -76,8 +91,8 @@ public class JottoModel
                 }
             }
 
-            for (int i = 0; i < 5; i++) {
-               for (int j = 0; j < 5; j++) {
+            for (int i = 0; i < NUM_LETTERS; i++) {
+               for (int j = 0; j < NUM_LETTERS; j++) {
                    if(guessStringClone[i] == cloneAnswerString[j] ){
                        partialMatches[i] = true;
                        partialMatchedCount[guessCount]++;
@@ -88,7 +103,7 @@ public class JottoModel
                }
             }
 
-            if(guessCount == 9 || exactMatchedCount[guessCount] == 5){
+            if(guessCount == 9 || exactMatchedCount[guessCount] == NUM_LETTERS){
                 gameOver();
             }
 
@@ -99,13 +114,13 @@ public class JottoModel
 
     private void gameOver(){
         gameOver = true;
-        if (exactMatchedCount[guessCount] == 5){
+        if (exactMatchedCount[guessCount] == NUM_LETTERS){
             won = true;
         }
     }
 
     private boolean validation(){
-        if (guessString.length() != 5){
+        if (guessString.length() != NUM_LETTERS){
             validation = false;
             return false;
         }else {

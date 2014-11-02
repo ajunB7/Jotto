@@ -88,6 +88,15 @@ class GameView extends JPanel implements IView {
             }
         });
 
+        giveUpButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFrame newFrame = new JFrame();
+                JOptionPane.showMessageDialog(newFrame, "The word was " + model.getAnswer() + " Try Again");
+                model.init();
+            }
+        });
+
         all.setLayout(new BoxLayout(all, BoxLayout.PAGE_AXIS));
         all.add(guessArea);
         all.add(Box.createRigidArea(new Dimension(0,10)));
@@ -99,7 +108,6 @@ class GameView extends JPanel implements IView {
 
     public void updateStatus(){
         String text = "";
-        System.out.println(model.getNewGame());
         if (model.getNewGame()){
             text = "Welcome to Jotto! - 10 Guesses Left!";
             gameStatusLabel.setText(text);
