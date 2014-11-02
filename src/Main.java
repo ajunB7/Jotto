@@ -1,9 +1,7 @@
 import javax.swing.*;
 import java.awt.Dimension;
 import java.awt.BorderLayout;
-import java.awt.GridLayout;
 import java.awt.event.*;
-import java.io.File;
 
 public class Main{
 
@@ -15,7 +13,7 @@ public class Main{
 
         model = new JottoModel();
         GameView gameView = new GameView(model);
-        TableView tableView = new TableView(model);
+        TableAndHintsView tableView = new TableAndHintsView(model);
         model.addView(gameView);
         model.addView(tableView);
         model.init();
@@ -26,6 +24,7 @@ public class Main{
         frame.getContentPane().add(p);
         p.add(gameView, BorderLayout.PAGE_START);
         p.add(tableView, BorderLayout.CENTER);
+//        p.add(letterHints, BorderLayout.CENTER);
 
 //      Set up menu
         JMenuBar menuBar = new JMenuBar();
