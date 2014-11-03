@@ -1,3 +1,5 @@
+import com.sun.org.apache.bcel.internal.generic.ARRAYLENGTH;
+
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.EtchedBorder;
@@ -5,7 +7,10 @@ import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.table.*;
+import java.util.ArrayList;
 import java.util.Vector;
+import java.util.Iterator;
+
 
 /**
  * Created by Ajun on 14-10-31.
@@ -33,44 +38,26 @@ class TableAndHintsView extends JPanel implements IView {
         scrollPane = new JScrollPane(table);
         tablePanel.add(scrollPane);
 
-        hints.setLayout(new BoxLayout(hints, BoxLayout.PAGE_AXIS));
+        JPanel outLineHints = new JPanel();
+        hints.setLayout(new GridLayout(7,4));
+        hints.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
+        createHints();
+
         TitledBorder title;
         title = BorderFactory.createTitledBorder("Letters Guessed");
         title.setTitleJustification(TitledBorder.CENTER);
-        hints.setBorder(title);
-        createHints();
+        outLineHints.setBorder(title);
+        tablePanel.setLayout(new BoxLayout(tablePanel, BoxLayout.LINE_AXIS));
 
 
+        outLineHints.add(hints);
         all.add(tablePanel);
-        all.add(hints);
+        all.add(outLineHints);
         this.add(all);
     }
     private void createHints(){
-        JPanel AD = new JPanel();
-        JPanel EH = new JPanel();
-        JPanel IL = new JPanel();
-        JPanel MP = new JPanel();
-        JPanel QT = new JPanel();
-        JPanel UX = new JPanel();
-        JPanel YZ = new JPanel();
-
         letters = new JLabel[26];
-        letterSpace = 20;
         getLables();
-        addLables(0, AD);
-        addLables(4, EH);
-        addLables(8, IL);
-        addLables(12, MP);
-        addLables(16, QT);
-        addLables(20, UX);
-        YZ.add(letters[24]);
-        YZ.add(Box.createRigidArea(new Dimension(letterSpace,0)));
-        YZ.add(letters[25]);
-        hints.add(YZ);
-        hints.add(Box.createRigidArea(new Dimension(150,0)));
-
-
-
     }
 
 
@@ -78,26 +65,17 @@ class TableAndHintsView extends JPanel implements IView {
     private void getLables(){
         char[] alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
 
-        for (int i = 0; i < 26; i++) {
+        for (int i = 0; i < alphabet.length; i++) {
             letters[i] = new JLabel(String.valueOf(alphabet[i]));
             letters[i].setOpaque(true);
             letters[i].setBackground(Color.LIGHT_GRAY);
+            letters[i].setFont(letters[i].getFont().deriveFont(25f));
+            hints.add(letters[i]);
         }
-
-    }
-
-    private void addLables(int start, JPanel panel){
-        panel.setLayout(new BoxLayout(panel, BoxLayout.LINE_AXIS));
-        for (int i = start; i < (start+4) ; i++) {
-            panel.add(Box.createRigidArea(new Dimension(letterSpace,0)));
-            panel.add(letters[i]);
-        }
-        hints.add(panel);
-        hints.add(Box.createRigidArea(new Dimension(0,10)));
     }
 
     private void initTable(){
-        table.setPreferredScrollableViewportSize(new Dimension(500, 200));
+        table.setPreferredScrollableViewportSize(new Dimension(600, 235));
         table.setFillsViewportHeight(true);
 
         String[] myDataColumnNames = {"Words", "Exact" , "Partial"};
@@ -112,14 +90,42 @@ class TableAndHintsView extends JPanel implements IView {
                 dtm.removeRow(i);
             }
         }
-        else if (model.getValidation()) {
+        else if (model.getValidation() && !model.getChangedHints()) {
             dtm.addRow(new Object[]{model.getGuessString(), model.getExactMatches(), model.getPartialMatches()});
         }
+    }
+    public void updateLetters(){
+       ArrayList<Integer> exact = model.getExactSoFar();
+       ArrayList<Integer> partial = model.getPartialSoFar();
+       ArrayList<Integer> any = model.getGuessedSoFar();
+        if(model.getNewGame()){
+            for (int i = 0; i < letters.length; i++) {
+                letters[i].setBackground(Color.LIGHT_GRAY);
+            }
+        } else {
+            for (int i : any) {
+                letters[i].setBackground(Color.RED);
+            }
+            if (model.getShowHints()) {
+                for (int i : partial) {
+                    letters[i].setBackground(Color.YELLOW);
+                }
+
+
+                for (int i : exact) {
+                    letters[i].setBackground(Color.GREEN);
+                }
+            }
+
+        }
+
+
     }
 
     // IView interface
     public void updateView() {
         updateTable();
+        updateLetters();
 
     }
 

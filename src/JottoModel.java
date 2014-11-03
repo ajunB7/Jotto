@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Vector;
 
 // View interface
 interface IView {
@@ -24,7 +25,13 @@ public class JottoModel
     private boolean validation;
     private boolean won;
     private boolean newGame;
+    private boolean showHints;
     private int difficulty;
+    private boolean hintsToggle;
+    private ArrayList<Integer> exactSoFar;
+    private ArrayList<Integer> partialSoFar;
+    private ArrayList<Integer> guessedSoFar;
+
 
     public JottoModel(){
         difficulty = 0;
@@ -49,6 +56,20 @@ public class JottoModel
         validation = true;
         won = false;
         newGame = true;
+        showHints = false;
+        hintsToggle = false;
+        exactSoFar = new ArrayList<Integer>();
+        partialSoFar = new ArrayList<Integer>();
+        guessedSoFar = new ArrayList<Integer>();
+
+
+//        exactSoFar = new int[5];
+//        partialSoFar = new int[5];
+//        for (int i=0; i< 5; i++){
+//            exactSoFar[i] = 0;
+//            partialSoFar[i] = 0;
+//
+//        }
         notifyObservers();
     }
 
@@ -62,6 +83,14 @@ public class JottoModel
     public void setDifficulty(int diff){
         difficulty = diff;
         init();
+    }
+
+    public void setShowHints(boolean status){
+        showHints = status;
+        hintsToggle = true;
+        notifyObservers();
+        hintsToggle = false;
+
     }
 
     private void resetMatches(){
@@ -78,15 +107,24 @@ public class JottoModel
             guessCount++;
             resetMatches();
 
+
+
             char[] cloneAnswerString = answerString.toCharArray();
             char[] guessStringClone = guessString.toCharArray();
+
+            for (int i = 0; i < NUM_LETTERS; i++) {
+                guessedSoFar.add(guessStringClone[i]-65);
+            }
 
             for (int i = 0; i < NUM_LETTERS; i++) {
                 if(cloneAnswerString[i] == guessStringClone[i] ){
                      exactMatches[i] = true;
                      exactMatchedCount[guessCount]++;
-                     cloneAnswerString[i] = '*';
-                     guessStringClone[i] = '^';
+                    exactSoFar.add((int) guessStringClone[i] - 65);
+                    int partialChar = (int)guessStringClone[i]-65;
+                    cloneAnswerString[i] = '*';
+                    guessStringClone[i] = '^';
+
 //                    System.out.println("Matched: " + guessString.charAt(i));
                 }
             }
@@ -96,8 +134,11 @@ public class JottoModel
                    if(guessStringClone[i] == cloneAnswerString[j] ){
                        partialMatches[i] = true;
                        partialMatchedCount[guessCount]++;
+                       partialSoFar.add((int)guessStringClone[i]-65);
+
+                       int partialChar = (int)guessStringClone[i] - 65;
                        cloneAnswerString[j] = '*';
-//                       System.out.println("Partial Matched: " + guessString.charAt(i));
+
                        break;
                    }
                }
@@ -156,7 +197,21 @@ public class JottoModel
     public boolean getNewGame(){
         return newGame;
     }
-
+    public boolean getShowHints(){
+        return showHints;
+    }
+    public boolean getChangedHints(){
+        return hintsToggle;
+    }
+    public ArrayList<Integer> getExactSoFar(){
+        return exactSoFar;
+    }
+    public ArrayList<Integer> getPartialSoFar(){
+        return partialSoFar;
+    }
+    public ArrayList<Integer> getGuessedSoFar(){
+        return guessedSoFar;
+    }
 
     // all views of this model
     private ArrayList<IView> views = new ArrayList<IView>();

@@ -17,7 +17,7 @@ class GameView extends JPanel implements IView {
     private JottoModel model;
     private JTextField guessInput = new JTextField(10);
     private JButton guessButton = new JButton("Enter");
-    private JButton hitsButton = new JButton("Show Hints");
+    private JButton showHintsButton = new JButton("Show Hints");
     private JButton giveUpButton = new JButton("Give Up");
     private JLabel gameStatusLabel;
     private JPanel gameStatus;
@@ -42,7 +42,7 @@ class GameView extends JPanel implements IView {
         guessArea.add(Box.createRigidArea(new Dimension(10, 0)));
         guessArea.add(guessButton);
         guessArea.add(Box.createRigidArea(new Dimension(180,0)));
-        guessArea.add(hitsButton);
+        guessArea.add(showHintsButton);
         guessArea.add(Box.createRigidArea(new Dimension(10,0)));
         guessArea.add(giveUpButton);
 
@@ -77,7 +77,7 @@ class GameView extends JPanel implements IView {
 
             @Override
             public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_ENTER){
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     model.setGuessString(guessInput.getText());
                 }
             }
@@ -94,6 +94,19 @@ class GameView extends JPanel implements IView {
                 JFrame newFrame = new JFrame();
                 JOptionPane.showMessageDialog(newFrame, "The word was " + model.getAnswer() + " Try Again");
                 model.init();
+            }
+        });
+
+        showHintsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(model.getShowHints()){
+                    showHintsButton.setText("Show Hints");
+                    model.setShowHints(false);
+                }else{
+                    showHintsButton.setText("Hide Hints");
+                    model.setShowHints(true);
+                }
             }
         });
 

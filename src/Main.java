@@ -10,7 +10,6 @@ public class Main{
     public static void main(String[] args){
         JFrame frame = new JFrame("Jotto");
 
-
         model = new JottoModel();
         GameView gameView = new GameView(model);
         TableAndHintsView tableView = new TableAndHintsView(model);
