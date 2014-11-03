@@ -39,14 +39,17 @@ class TableAndHintsView extends JPanel implements IView {
         tablePanel.add(scrollPane);
 
         JPanel outLineHints = new JPanel();
+        outLineHints.setLayout(new BoxLayout(outLineHints, BoxLayout.PAGE_AXIS));
+        TitledBorder title;
+        title = BorderFactory.createTitledBorder("Guesses");
+        title.setTitleJustification(TitledBorder.CENTER);
+        outLineHints.setBorder(title);
+
         hints.setLayout(new GridLayout(7,4));
         hints.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
         createHints();
 
-        TitledBorder title;
-        title = BorderFactory.createTitledBorder("Letters Guessed");
-        title.setTitleJustification(TitledBorder.CENTER);
-        outLineHints.setBorder(title);
+
         tablePanel.setLayout(new BoxLayout(tablePanel, BoxLayout.LINE_AXIS));
 
 
@@ -69,7 +72,7 @@ class TableAndHintsView extends JPanel implements IView {
             letters[i] = new JLabel(String.valueOf(alphabet[i]));
             letters[i].setOpaque(true);
             letters[i].setBackground(Color.LIGHT_GRAY);
-            letters[i].setFont(letters[i].getFont().deriveFont(25f));
+            letters[i].setFont(letters[i].getFont().deriveFont(26f));
             hints.add(letters[i]);
         }
     }
@@ -79,8 +82,14 @@ class TableAndHintsView extends JPanel implements IView {
         table.setFillsViewportHeight(true);
 
         String[] myDataColumnNames = {"Words", "Exact" , "Partial"};
-        dtm = new DefaultTableModel(0, 0);
+        dtm = new DefaultTableModel(0, 0){
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
         dtm.setColumnIdentifiers(myDataColumnNames);
+
         table.setModel(dtm);
     }
 

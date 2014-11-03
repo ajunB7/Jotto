@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.Vector;
 
+
 // View interface
 interface IView {
     public void updateView();
@@ -13,9 +14,11 @@ public class JottoModel
 	public static final String[] LEVELS = {
       "Easy", "Medium", "Hard", "Any Difficulty"};
     private WordList allWords;
+    private ArrayList<String> hintsWords;
     private Word guessWord;
     private String guessString;
     private String answerString;
+    private String invalidText;
     private int[] exactMatchedCount;
     private int[] partialMatchedCount;
     private int guessCount;
@@ -31,15 +34,16 @@ public class JottoModel
     private ArrayList<Integer> exactSoFar;
     private ArrayList<Integer> partialSoFar;
     private ArrayList<Integer> guessedSoFar;
+    private String correctSoFar;
 
 
     public JottoModel(){
+        allWords = new WordList("words.txt");
         difficulty = 0;
     }
 
 
     public void init(){
-        allWords = new WordList("words.txt");
         if (difficulty != 3) {
             guessWord = allWords.randomWord(difficulty);
         }else {
@@ -58,19 +62,21 @@ public class JottoModel
         newGame = true;
         showHints = false;
         hintsToggle = false;
+        invalidText = "";
         exactSoFar = new ArrayList<Integer>();
         partialSoFar = new ArrayList<Integer>();
         guessedSoFar = new ArrayList<Integer>();
+        correctSoFar = "";
+        hintsWords = allWords.getWords();
 
 
-//        exactSoFar = new int[5];
-//        partialSoFar = new int[5];
-//        for (int i=0; i< 5; i++){
-//            exactSoFar[i] = 0;
-//            partialSoFar[i] = 0;
-//
-//        }
         notifyObservers();
+    }
+
+    public void setTargetString(String input){
+        init();
+        answerString = input.trim().toUpperCase();
+        System.out.println("Guess is now set to: " + answerString );
     }
 
     public void setGuessString(String input){
@@ -118,10 +124,10 @@ public class JottoModel
 
             for (int i = 0; i < NUM_LETTERS; i++) {
                 if(cloneAnswerString[i] == guessStringClone[i] ){
-                     exactMatches[i] = true;
-                     exactMatchedCount[guessCount]++;
+                    exactMatches[i] = true;
+                    exactMatchedCount[guessCount]++;
+                    correctSoFar+= guessStringClone[i];
                     exactSoFar.add((int) guessStringClone[i] - 65);
-                    int partialChar = (int)guessStringClone[i]-65;
                     cloneAnswerString[i] = '*';
                     guessStringClone[i] = '^';
 
@@ -134,9 +140,8 @@ public class JottoModel
                    if(guessStringClone[i] == cloneAnswerString[j] ){
                        partialMatches[i] = true;
                        partialMatchedCount[guessCount]++;
+                       correctSoFar+= guessStringClone[i];
                        partialSoFar.add((int)guessStringClone[i]-65);
-
-                       int partialChar = (int)guessStringClone[i] - 65;
                        cloneAnswerString[j] = '*';
 
                        break;
@@ -146,11 +151,17 @@ public class JottoModel
 
             if(guessCount == 9 || exactMatchedCount[guessCount] == NUM_LETTERS){
                 gameOver();
+            }else{
+                updateWordsList();
             }
 
 
         }
         notifyObservers();
+    }
+
+    private void updateWordsList(){
+       hintsWords = allWords.wordLeft(correctSoFar.toCharArray(), hintsWords);
     }
 
     private void gameOver(){
@@ -163,11 +174,14 @@ public class JottoModel
     private boolean validation(){
         if (guessString.length() != NUM_LETTERS){
             validation = false;
-            return false;
-        }else {
+            invalidText = "Invalid Input - Word must enter a valid 5 letter word";
+        }else if (!(allWords.contains(guessString))) {
+            validation = false;
+            invalidText = "You must enter a valid dictionary Word";
+        } else {
             validation = true;
-            return true;
         }
+        return validation;
     }
 
     public int getExactMatches(){
@@ -211,6 +225,12 @@ public class JottoModel
     }
     public ArrayList<Integer> getGuessedSoFar(){
         return guessedSoFar;
+    }
+    public String getInvalidText(){
+        return invalidText;
+    }
+    public ArrayList<String> getHintsWords(){
+        return hintsWords;
     }
 
     // all views of this model

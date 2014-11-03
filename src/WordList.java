@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 
@@ -153,4 +154,40 @@ public final class WordList extends Object implements IWordList
       }
       return answer;
    }
-}
+
+   public ArrayList<String> wordLeft(char[] correctSoFar, ArrayList<String> hintsWords){
+       ArrayList<String> validWords = new ArrayList<String>();
+        for (String word: hintsWords){
+           boolean[] has = new boolean[correctSoFar.length];
+            for (int i = 0; i < correctSoFar.length; i++) { // A B C
+                char[] textWord = word.toCharArray(); // B A R K S
+                for (int j = 0; j < textWord.length; j++ ) {
+                    if(correctSoFar[i] == textWord[j]){
+                        has[i] = true;
+                        break;
+                    }else{
+                        has[i] = false;
+                    }
+                 }
+            }
+            boolean hasTotal = true;
+            for (int i = 0; i < has.length; i++) {
+                if(!(has[i])){
+                    hasTotal = false;
+                }
+            }
+            if(hasTotal){
+                validWords.add(word);
+            }
+        }
+        return validWords;
+        }
+
+    public ArrayList<String> getWords(){
+        ArrayList<String> list = new ArrayList<String>();
+        for(Word word : words){
+            if (word != null) {list.add(word.getWord());}
+        }
+        return list;
+    }
+   }

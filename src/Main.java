@@ -13,8 +13,10 @@ public class Main{
         model = new JottoModel();
         GameView gameView = new GameView(model);
         TableAndHintsView tableView = new TableAndHintsView(model);
+        WordsView  wordView = new WordsView(model);
         model.addView(gameView);
         model.addView(tableView);
+        model.addView(wordView);
         model.init();
 
 
@@ -23,6 +25,7 @@ public class Main{
         frame.getContentPane().add(p);
         p.add(gameView, BorderLayout.PAGE_START);
         p.add(tableView, BorderLayout.CENTER);
+        p.add(wordView, BorderLayout.PAGE_END);
 //        p.add(letterHints, BorderLayout.CENTER);
 
 //      Set up menu
@@ -40,7 +43,15 @@ public class Main{
                 model.init();
             }
         });
+        JMenuItem setWord = new JMenuItem("Set Target Word");
+        setWord.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String word = JOptionPane.showInputDialog(null, "Enter the target word");
+                model.setTargetString(word);
 
+            }
+        });
 
 
         JMenu menuDiff = new JMenu("Difficulty");
@@ -88,6 +99,7 @@ public class Main{
         });
 
         menu.add(menuItem);
+        menu.add(setWord);
 
         menuDiff.add(menuItemDiffEasy);
         menuDiff.add(menuItemDiffMed);

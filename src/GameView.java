@@ -143,7 +143,7 @@ class GameView extends JPanel implements IView {
             gameStatus.setBackground(Color.getHSBColor(0.212f,0.76f,1.0f));
             guessInput.setText("");
         } else {
-           text = "Invalid Input - Word must enter a valid 5 letter word";
+           text = model.getInvalidText();
             gameStatusLabel.setText(text);
             gameStatus.setBackground(Color.RED);
         }

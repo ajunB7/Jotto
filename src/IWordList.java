@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 /** Classes implementing <code>IWordList</code> provide a list of
  * word-difficulty pairs ({@link Word} objects).
  *
@@ -61,4 +63,7 @@ public interface IWordList
     * @return a filled array of Words that pass the test;  an array with length
     * 0 if no such words exist. */
    public Word[] getWords(int maxDesired, IWordPredicate test);
+
+    public ArrayList<String> wordLeft(char[] correctSoFar, ArrayList<String> hintsWords);
+    public ArrayList<String> getWords();
 }
