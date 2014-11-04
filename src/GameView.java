@@ -139,13 +139,13 @@ class GameView extends JPanel implements IView {
         }
         else if (model.getGameOver()){
             if (model.getWon()){
-                text = "YOU WIN! - You guessed the correct Word";
-                gameStatus.setBackground(Color.GREEN);
+                text = "YOU WIN! - Play Again";
             }else {
-                text = "Game Over! - The correct word was " + model.getAnswer();
-                gameStatus.setBackground(Color.RED);
+                text = "Game Over! - The correct word was " + model.getAnswer() + " - Play Again";
             }
-            gameStatusLabel.setText(text);
+            JFrame newFrame = new JFrame();
+            JOptionPane.showMessageDialog(newFrame, text);
+            model.init();
         }
         else if (model.getValidation()){
             text = "You guessed " + model.getGuessString() + " - " + model.getGuessCountLeft() + " Guesses Left!";
