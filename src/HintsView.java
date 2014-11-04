@@ -7,6 +7,11 @@ import javax.swing.border.TitledBorder;
 import javax.swing.table.*;
 import java.util.ArrayList;
 import java.util.Vector;
+import java.awt.image.BufferedImage;
+import javax.imageio.ImageIO;
+import java.io.IOException;
+import java.io.File;
+
 
 /**
  * Created by Ajun on 14-11-02.
@@ -50,8 +55,50 @@ public class HintsView extends JPanel implements IView {
 
         hintWords.add(scroll);
         outLineHints.add(hints);
+
+        JPanel allText = new JPanel();
+        JPanel helpText = new JPanel();
+        JPanel summaryText = new JPanel();
+        helpText.setLayout(new BoxLayout(helpText, BoxLayout.PAGE_AXIS));
+        summaryText.setLayout(new BoxLayout(summaryText, BoxLayout.Y_AXIS));
+
+        allText.setLayout(new BoxLayout(allText, BoxLayout.PAGE_AXIS));
+
+
+        JLabel red = new JLabel("Red = Letter Already Guessed");
+        red.setForeground(Color.RED);
+        red.setAlignmentX(Component.CENTER_ALIGNMENT);
+        title = BorderFactory.createTitledBorder("Help");
+        helpText.setBorder(title);
+        helpText.add(red);
+
+
+        JLabel author = new JLabel("Ajunpreet Bambrah");
+        author.setForeground(Color.GRAY);
+        author.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        summaryText.add(author);
+
+
+        allText.add(helpText);
+                allText.add(Box.createRigidArea(new Dimension(0,100)));
+
+        try{
+            BufferedImage logo = ImageIO.read(new File("rsz_1ajunlogo.png"));
+
+            JLabel pic = new JLabel(new ImageIcon(logo));
+            pic.setAlignmentX(Component.CENTER_ALIGNMENT);
+            allText.add(pic);
+
+        }catch(IOException e){
+            System.out.println(e.toString());
+        }
+        allText.add(summaryText);
+
         all.add(hintWords);
         all.add(outLineHints);
+        all.add(Box.createRigidArea(new Dimension(40,0)));
+        all.add(allText);
 
         this.add(all);
 

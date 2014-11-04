@@ -136,7 +136,6 @@ class GameView extends JPanel implements IView {
             }else{
                 showHintsButton.setVisible(true);
             }
-            System.out.println(model.getLevelIsEasy());
         }
         else if (model.getGameOver()){
             if (model.getWon()){

@@ -118,21 +118,12 @@ public class JottoModel
     public void setAutoComplete(String inputSoFar){
         autoComplete = true;
         autoWords = new ArrayList<String>();
-        System.out.println(inputSoFar);
-        System.out.println(listUsedByHints.size());
-int count = 0;
-        for (String word: listUsedByHints){
-            if (count < 10){
-                System.out.println(word);
-                System.out.println(word.contains(inputSoFar));
 
-            }
+        for (String word: listUsedByHints){
             if(word.contains(inputSoFar)){
                 autoWords.add(word);
             }
-            count++;
         }
-        System.out.println(autoWords.size());
         notifyObservers();
         autoComplete = false;
     }
