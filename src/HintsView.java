@@ -25,6 +25,8 @@ public class HintsView extends JPanel implements IView {
     private JLabel[] letters;
     private JPanel hintWords;
     private ArrayList<String> listOfWords;
+    private JLabel yellow;
+    private JLabel green;
 
 
 
@@ -66,11 +68,19 @@ public class HintsView extends JPanel implements IView {
 
 
         JLabel red = new JLabel("Red = Letter Already Guessed");
-        red.setForeground(Color.RED);
         red.setAlignmentX(Component.CENTER_ALIGNMENT);
+        yellow = new JLabel("Yellow = Letter Partially Correct");
+        yellow.setAlignmentX(Component.CENTER_ALIGNMENT);
+        green = new JLabel("Green = Letter Exactly Correct");
+        green.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+
         title = BorderFactory.createTitledBorder("Help");
         helpText.setBorder(title);
         helpText.add(red);
+        helpText.add(yellow);
+        helpText.add(green);
+
 
 
         JLabel author = new JLabel("Ajunpreet Bambrah");
@@ -146,6 +156,13 @@ public class HintsView extends JPanel implements IView {
                 }
             }
 
+        }
+        if (model.getShowHints()){
+            green.setVisible(true);
+            yellow.setVisible(true);
+        }else {
+            green.setVisible(false);
+            yellow.setVisible(false);
         }
 
 
