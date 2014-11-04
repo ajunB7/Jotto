@@ -15,6 +15,8 @@ public class JottoModel
       "Easy", "Medium", "Hard", "Any Difficulty"};
     private WordList allWords;
     private ArrayList<String> hintsWords;
+    private ArrayList<String> listUsedByHints;
+    private ArrayList<String> autoWords;
     private Word guessWord;
     private String guessString;
     private String answerString;
@@ -29,6 +31,7 @@ public class JottoModel
     private boolean won;
     private boolean newGame;
     private boolean showHints;
+    private boolean autoComplete;
     private int difficulty;
     private boolean hintsToggle;
     private ArrayList<Integer> exactSoFar;
@@ -68,6 +71,7 @@ public class JottoModel
         guessedSoFar = new ArrayList<Integer>();
         correctSoFar = "";
         hintsWords = allWords.getWords();
+        autoComplete = false;
 
 
         notifyObservers();
@@ -90,6 +94,9 @@ public class JottoModel
         difficulty = diff;
         init();
     }
+    public void setListUsed(ArrayList<String> list){
+        listUsedByHints = list;
+    }
 
     public void setShowHints(boolean status){
         showHints = status;
@@ -106,6 +113,28 @@ public class JottoModel
         }
         partialMatchedCount[guessCount] = 0;
         exactMatchedCount[guessCount] = 0;
+    }
+
+    public void setAutoComplete(String inputSoFar){
+        autoComplete = true;
+        autoWords = new ArrayList<String>();
+        System.out.println(inputSoFar);
+        System.out.println(listUsedByHints.size());
+int count = 0;
+        for (String word: listUsedByHints){
+            if (count < 10){
+                System.out.println(word);
+                System.out.println(word.contains(inputSoFar));
+
+            }
+            if(word.contains(inputSoFar)){
+                autoWords.add(word);
+            }
+            count++;
+        }
+        System.out.println(autoWords.size());
+        notifyObservers();
+        autoComplete = false;
     }
 
     private void validateGuess(){
@@ -231,6 +260,15 @@ public class JottoModel
     }
     public ArrayList<String> getHintsWords(){
         return hintsWords;
+    }
+    public ArrayList<String> getAutoComplete(){
+        return autoWords;
+    }
+    public boolean getAutoCompleteStatus(){
+        return autoComplete;
+    }
+    public boolean getLevelIsEasy(){
+        return difficulty==0;
     }
 
     // all views of this model

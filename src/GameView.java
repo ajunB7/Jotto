@@ -28,7 +28,7 @@ class GameView extends JPanel implements IView {
         JPanel all = new JPanel();
 
         JPanel guessArea = new JPanel();
-        JLabel guessAreaLabel = new JLabel("Guess a word of 5 letters: ");
+        JLabel guessAreaLabel = new JLabel("Guess a 5 letter word: ");
         guessAreaLabel.setLabelFor(guessInput);
         guessArea.setLayout(new BoxLayout(guessArea, BoxLayout.LINE_AXIS));
 //        guessArea.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -39,24 +39,24 @@ class GameView extends JPanel implements IView {
         guessArea.setBorder(loweredetched);
         guessArea.add(guessAreaLabel);
         guessArea.add(guessInput);
-        guessArea.add(Box.createRigidArea(new Dimension(10, 0)));
+//        guessArea.add(Box.createRigidArea(new Dimension(10, 0)));
         guessArea.add(guessButton);
-        guessArea.add(Box.createRigidArea(new Dimension(180,0)));
+        guessArea.add(Box.createRigidArea(new Dimension(45,0)));
         guessArea.add(showHintsButton);
-        guessArea.add(Box.createRigidArea(new Dimension(10,0)));
+//        guessArea.add(Box.createRigidArea(new Dimension(10,0)));
         guessArea.add(giveUpButton);
 
-        guessArea.add(Box.createRigidArea(new Dimension(0,20)));
+//        guessArea.add(Box.createRigidArea(new Dimension(0,20)));
 
         gameStatus = new JPanel();
         gameStatus.setLayout(new BoxLayout(gameStatus, BoxLayout.X_AXIS));
 //        gameStatus.add(guessArea);
         gameStatusLabel = new JLabel();
 //        gameStatus.setBorder(loweredetched);
-        gameStatus.add(Box.createRigidArea(new Dimension(200,20)));
+        gameStatus.add(Box.createRigidArea(new Dimension(120,20)));
         gameStatusLabel.setHorizontalAlignment(SwingConstants.LEFT);
         gameStatus.add(gameStatusLabel);
-        gameStatus.add(Box.createRigidArea(new Dimension(200,20)));
+        gameStatus.add(Box.createRigidArea(new Dimension(120,20)));
         gameStatus.setBackground(Color.getHSBColor(0.212f,0.76f,1.0f));
 
 
@@ -72,7 +72,6 @@ class GameView extends JPanel implements IView {
         guessInput.addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {
-
             }
 
             @Override
@@ -84,7 +83,13 @@ class GameView extends JPanel implements IView {
 
             @Override
             public void keyReleased(KeyEvent e) {
-
+                if (e.getKeyCode() != KeyEvent.VK_ENTER){
+                    String entered = guessInput.getText().toUpperCase();
+                    if(entered.length() > 1) {
+                        model.setAutoComplete(entered);
+                    }
+                    guessInput.setText(entered);
+                }
             }
         });
 
@@ -126,6 +131,12 @@ class GameView extends JPanel implements IView {
             gameStatusLabel.setText(text);
             gameStatus.setBackground(Color.getHSBColor(0.212f,0.76f,1.0f));
             guessInput.setText("");
+            if(!(model.getLevelIsEasy())){
+                showHintsButton.setVisible(false);
+            }else{
+                showHintsButton.setVisible(true);
+            }
+            System.out.println(model.getLevelIsEasy());
         }
         else if (model.getGameOver()){
             if (model.getWon()){
@@ -142,7 +153,7 @@ class GameView extends JPanel implements IView {
             gameStatusLabel.setText(text);
             gameStatus.setBackground(Color.getHSBColor(0.212f,0.76f,1.0f));
             guessInput.setText("");
-        } else {
+        } else if (!(model.getAutoCompleteStatus())) {
            text = model.getInvalidText();
             gameStatusLabel.setText(text);
             gameStatus.setBackground(Color.RED);

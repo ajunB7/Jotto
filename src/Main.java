@@ -12,8 +12,8 @@ public class Main{
 
         model = new JottoModel();
         GameView gameView = new GameView(model);
-        TableAndHintsView tableView = new TableAndHintsView(model);
-        WordsView  wordView = new WordsView(model);
+        TableView tableView = new TableView(model);
+        HintsView wordView = new HintsView(model);
         model.addView(gameView);
         model.addView(tableView);
         model.addView(wordView);
@@ -113,7 +113,7 @@ public class Main{
 
 
 
-        frame.setPreferredSize(new Dimension(800,600));
+        frame.setPreferredSize(new Dimension(625,600));
         frame.pack();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
