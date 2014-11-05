@@ -137,16 +137,6 @@ class GameView extends JPanel implements IView {
                 showHintsButton.setVisible(true);
             }
         }
-        else if (model.getGameOver()){
-            if (model.getWon()){
-                text = "YOU WIN! - Play Again";
-            }else {
-                text = "Game Over! - The correct word was " + model.getAnswer() + " - Play Again";
-            }
-            JFrame newFrame = new JFrame();
-            JOptionPane.showMessageDialog(newFrame, text);
-            model.init();
-        }
         else if (model.getValidation()){
             text = "You guessed " + model.getGuessString() + " - " + model.getGuessCountLeft() + " Guesses Left!";
             gameStatusLabel.setText(text);

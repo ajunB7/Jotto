@@ -1,3 +1,4 @@
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Vector;
 
@@ -32,12 +33,14 @@ public class JottoModel
     private boolean newGame;
     private boolean showHints;
     private boolean autoComplete;
+    private boolean windowChange;
     private int difficulty;
     private boolean hintsToggle;
     private ArrayList<Integer> exactSoFar;
     private ArrayList<Integer> partialSoFar;
     private ArrayList<Integer> guessedSoFar;
     private String correctSoFar;
+    private Dimension windowSize;
 
 
     public JottoModel(){
@@ -72,6 +75,7 @@ public class JottoModel
         correctSoFar = "";
         hintsWords = allWords.getWords();
         autoComplete = false;
+        windowChange = false;
 
 
         notifyObservers();
@@ -104,6 +108,13 @@ public class JottoModel
         notifyObservers();
         hintsToggle = false;
 
+    }
+
+    public void setDimensions(Dimension dim){
+        windowSize = dim;
+        windowChange = true;
+        notifyObservers();
+        windowChange = false;
     }
 
     private void resetMatches(){
@@ -261,6 +272,10 @@ public class JottoModel
     public boolean getLevelIsEasy(){
         return difficulty==0;
     }
+    public Dimension getDimension(){
+        return windowSize;
+    }
+    public boolean getWindowChange(){return windowChange;}
 
     // all views of this model
     private ArrayList<IView> views = new ArrayList<IView>();

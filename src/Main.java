@@ -1,6 +1,5 @@
 import javax.swing.*;
-import java.awt.Dimension;
-import java.awt.BorderLayout;
+import java.awt.*;
 import java.awt.event.*;
 
 public class Main{
@@ -111,11 +110,33 @@ public class Main{
         frame.setJMenuBar(menuBar);
 
 
+        p.addComponentListener(new ComponentListener() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                Component comp = (Component) e.getSource();
+                model.setDimensions(comp.getSize());
+            }
 
+            @Override
+            public void componentMoved(ComponentEvent e) {
+
+            }
+
+            @Override
+            public void componentShown(ComponentEvent e) {
+
+            }
+
+            @Override
+            public void componentHidden(ComponentEvent e) {
+
+            }
+        });
 
         frame.setPreferredSize(new Dimension(625,600));
         frame.pack();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setMinimumSize(new Dimension(625, 600));
         frame.setVisible(true);
 
 

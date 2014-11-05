@@ -1,5 +1,3 @@
-import com.sun.org.apache.bcel.internal.generic.ARRAYLENGTH;
-
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.EtchedBorder;
@@ -35,8 +33,6 @@ class TableView extends JPanel implements IView {
         tablePanel.add(scrollPane);
 
 
-
-
         tablePanel.setLayout(new BoxLayout(tablePanel, BoxLayout.LINE_AXIS));
 
 
@@ -45,7 +41,7 @@ class TableView extends JPanel implements IView {
     }
 
     private void initTable(){
-        table.setPreferredScrollableViewportSize(new Dimension(600, 235));
+        table.setPreferredScrollableViewportSize(new Dimension(600, 160));
         table.setFillsViewportHeight(true);
 
         String[] myDataColumnNames = {"Words", "Exact" , "Partial"};
@@ -61,13 +57,39 @@ class TableView extends JPanel implements IView {
     }
 
     public void updateTable(){
-        if (model.getNewGame()){
+        if(model.getWindowChange()){
+            int size = model.getDimension().height - 600 + 160;
+            if(size > 160) {
+                table.setPreferredScrollableViewportSize(new Dimension(600, size));
+                table.setFillsViewportHeight(true);
+                revalidate();
+            }
+        }
+        else if (model.getNewGame()){
             for (int i = (dtm.getRowCount() - 1); i > -1; i--) {
                 dtm.removeRow(i);
             }
         }
         else if (model.getValidation() && !model.getChangedHints() && !model.getAutoCompleteStatus()) {
             dtm.addRow(new Object[]{model.getGuessString(), model.getExactMatches(), model.getPartialMatches()});
+        }
+
+
+        if (model.getGameOver()){
+            String text = "";
+            if (model.getWon()){
+                text = "YOU WIN! - Play Again?";
+            }else {
+                text = "You Lose! - The correct word was " + model.getAnswer() + " - Play Again?";
+            }
+            JFrame newFrame = new JFrame();
+            String title = "Game Over!";
+            int choose = JOptionPane.showConfirmDialog(newFrame, text, title, JOptionPane.YES_NO_OPTION);
+            if(choose == JOptionPane.YES_OPTION){
+                model.init();
+            }else{
+                System.exit(0);
+            }
         }
     }
 
