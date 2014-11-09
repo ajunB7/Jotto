@@ -1,12 +1,7 @@
 import javax.swing.*;
-import javax.swing.border.Border;
-import javax.swing.border.EtchedBorder;
 import java.awt.*;
-import java.awt.event.*;
 import javax.swing.border.TitledBorder;
-import javax.swing.table.*;
 import java.util.ArrayList;
-import java.util.Vector;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import java.io.IOException;
@@ -20,10 +15,12 @@ public class HintsView extends JPanel implements IView {
     private JottoModel model;
     private JScrollPane scroll;
     private JList list;
-    private JPanel hints;
+    private JPanel letterHints;
+//    Wraps everything
     private JPanel all;
     private JLabel[] letters;
-    private JPanel hintWords;
+//    Border Around the list of words
+    private JPanel hintList;
     private ArrayList<String> listOfWords;
     private JLabel yellow;
     private JLabel green;
@@ -31,47 +28,47 @@ public class HintsView extends JPanel implements IView {
 
 
     public HintsView(JottoModel jModel) {
-        hintWords = new JPanel();
+        hintList = new JPanel();
         model = jModel;
         scroll = new JScrollPane();
-        scroll.setPreferredSize(new Dimension(150, 250));
+        scroll.setPreferredSize(new Dimension(220, 240));
         list = new JList();
 
         all = new JPanel();
         all.setLayout(new BoxLayout(all, BoxLayout.LINE_AXIS));
 
-        hints = new JPanel();
+        letterHints = new JPanel();
         JPanel outLineHints = new JPanel();
        outLineHints.setLayout(new BoxLayout(outLineHints, BoxLayout.PAGE_AXIS));
        TitledBorder title;
        title = BorderFactory.createTitledBorder("Guesses");
        title.setTitleJustification(TitledBorder.CENTER);
        outLineHints.setBorder(title);
-       hints.setLayout(new GridLayout(7,4));
-       hints.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
+       letterHints.setLayout(new GridLayout(7, 4));
+       letterHints.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
        createHints();
 
        title = BorderFactory.createTitledBorder("All Words");
-        hintWords.setBorder(title);
+        hintList.setBorder(title);
 
+        hintList.add(scroll);
+        outLineHints.add(letterHints);
 
-        hintWords.add(scroll);
-        outLineHints.add(hints);
-
-        JPanel allText = new JPanel();
+        JPanel helpSummary = new JPanel();
         JPanel helpText = new JPanel();
         JPanel summaryText = new JPanel();
         helpText.setLayout(new BoxLayout(helpText, BoxLayout.PAGE_AXIS));
         summaryText.setLayout(new BoxLayout(summaryText, BoxLayout.Y_AXIS));
 
-        allText.setLayout(new BoxLayout(allText, BoxLayout.PAGE_AXIS));
+//        helpSummary.setLayout(new BoxLayout(helpSummary, BoxLayout.PAGE_AXIS));
 
+         helpSummary.setLayout(new BorderLayout());
 
-        JLabel red = new JLabel("Red = Letter Already Guessed");
+        JLabel red = new JLabel("Red = Already Guessed");
         red.setAlignmentX(Component.CENTER_ALIGNMENT);
-        yellow = new JLabel("Yellow = Letter Partially Correct");
+        yellow = new JLabel("Yellow = Partially Correct");
         yellow.setAlignmentX(Component.CENTER_ALIGNMENT);
-        green = new JLabel("Green = Letter Exactly Correct");
+        green = new JLabel("Green = Exactly Correct");
         green.setAlignmentX(Component.CENTER_ALIGNMENT);
 
 
@@ -89,26 +86,29 @@ public class HintsView extends JPanel implements IView {
 
         summaryText.add(author);
 
-
-        allText.add(helpText);
-                allText.add(Box.createRigidArea(new Dimension(0,100)));
+        helpSummary.add(helpText, BorderLayout.NORTH);
+        JPanel summary = new JPanel();
+        summary.setLayout(new BoxLayout(summary, BoxLayout.PAGE_AXIS));
+//        helpSummary.add(Box.createRigidArea(new Dimension(0, 100)));
 
         try{
             BufferedImage logo = ImageIO.read(new File("rsz_1ajunlogo.png"));
 
             JLabel pic = new JLabel(new ImageIcon(logo));
             pic.setAlignmentX(Component.CENTER_ALIGNMENT);
-            allText.add(pic);
+            summary.add(pic);
 
         }catch(IOException e){
             System.out.println(e.toString());
         }
-        allText.add(summaryText);
+        summary.add(summaryText);
+        helpSummary.add(summary, BorderLayout.SOUTH);
 
-        all.add(hintWords);
+
+        all.add(hintList);
         all.add(outLineHints);
-        all.add(Box.createRigidArea(new Dimension(40,0)));
-        all.add(allText);
+        all.add(Box.createRigidArea(new Dimension(60,0)));
+        all.add(helpSummary);
 
         this.add(all);
 
@@ -129,7 +129,7 @@ public class HintsView extends JPanel implements IView {
             letters[i].setOpaque(true);
             letters[i].setBackground(Color.LIGHT_GRAY);
             letters[i].setFont(letters[i].getFont().deriveFont(26f));
-            hints.add(letters[i]);
+            letterHints.add(letters[i]);
         }
     }
 
@@ -200,7 +200,7 @@ public class HintsView extends JPanel implements IView {
             title = BorderFactory.createTitledBorder("All Words");
         }
         title.setTitleJustification(TitledBorder.CENTER);
-        hintWords.setBorder(title);
+        hintList.setBorder(title);
     }
 
     // IView interface

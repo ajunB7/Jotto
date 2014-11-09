@@ -66,7 +66,6 @@ public class JottoModel
         validation = true;
         won = false;
         newGame = true;
-        showHints = false;
         hintsToggle = false;
         invalidText = "";
         exactSoFar = new ArrayList<Integer>();
@@ -76,6 +75,10 @@ public class JottoModel
         hintsWords = allWords.getWords();
         autoComplete = false;
         windowChange = false;
+
+        if(!(showHints)){
+            showHints = false;
+        }
 
 
         notifyObservers();

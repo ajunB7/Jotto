@@ -1,13 +1,6 @@
 import javax.swing.*;
-import javax.swing.border.Border;
-import javax.swing.border.EtchedBorder;
-import javax.swing.border.TitledBorder;
 import java.awt.*;
-import java.awt.event.*;
 import javax.swing.table.*;
-import java.util.ArrayList;
-import java.util.Vector;
-import java.util.Iterator;
 
 
 /**
@@ -19,6 +12,8 @@ class TableView extends JPanel implements IView {
     private JScrollPane scrollPane;
     private DefaultTableModel dtm;
     private JPanel all;
+    private static int tableWidth = 600;
+    private static int tableHeight = 160;
 
     public TableView(JottoModel jModel) {
         this.model = jModel;
@@ -41,7 +36,7 @@ class TableView extends JPanel implements IView {
     }
 
     private void initTable(){
-        table.setPreferredScrollableViewportSize(new Dimension(600, 160));
+        table.setPreferredScrollableViewportSize(new Dimension(tableWidth, tableHeight));
         table.setFillsViewportHeight(true);
 
         String[] myDataColumnNames = {"Words", "Exact" , "Partial"};
@@ -58,9 +53,9 @@ class TableView extends JPanel implements IView {
 
     public void updateTable(){
         if(model.getWindowChange()){
-            int size = model.getDimension().height - 600 + 160;
+            int size = model.getDimension().height - 600 + tableHeight;
             if(size > 160) {
-                table.setPreferredScrollableViewportSize(new Dimension(600, size));
+                table.setPreferredScrollableViewportSize(new Dimension(tableWidth, size));
                 table.setFillsViewportHeight(true);
                 revalidate();
             }

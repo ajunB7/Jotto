@@ -23,8 +23,8 @@ public class Main{
         JPanel p = new JPanel(new BorderLayout());
         frame.getContentPane().add(p);
         p.add(gameView, BorderLayout.PAGE_START);
-        p.add(tableView, BorderLayout.CENTER);
-        p.add(wordView, BorderLayout.PAGE_END);
+        p.add(tableView, BorderLayout.PAGE_END);
+        p.add(wordView, BorderLayout.CENTER);
 //        p.add(letterHints, BorderLayout.CENTER);
 
 //      Set up menu
