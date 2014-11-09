@@ -134,7 +134,7 @@ public class JottoModel
         autoWords = new ArrayList<String>();
 
         for (String word: listUsedByHints){
-            if(word.contains(inputSoFar)){
+            if(word.startsWith(inputSoFar)){
                 autoWords.add(word);
             }
         }
