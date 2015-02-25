@@ -1,7 +1,17 @@
-Ajunpreet Bambrah
-abambrah
-20427417
+# Jotto
+Java MVC based game for the University of Waterloo.
 
+#Information
+The player has to guess the secret word and has 10 chances to do so.
+Show Hints is recommended for first time players.
+More Information: http://en.wikipedia.org/wiki/Jotto
+
+#Demo
+https://vimeo.com/120443238
+
+
+
+#Options
 Set Target:
     The target word can be set from the Menu (File)
 
@@ -28,3 +38,9 @@ Show Hints:
 
 Give Up/Victory
     Opens a new popup window
+
+
+#Waterloo Students
+Do Not copy this code! As you will be caught.
+Do your research and try to learn on your own!
+https://plg.uwaterloo.ca/~migod/papers/2010/iwsc10.pdf
